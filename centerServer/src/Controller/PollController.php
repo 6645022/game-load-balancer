@@ -21,7 +21,7 @@ class PollController extends Controller
 
     }
     /**
-     * @Route("/poll", name="poll result",methods={"GET","HEAD"})
+     * @Route("/poll", name="poll result  master",methods={"GET","HEAD"})
      */
     public function pollAction()
     {
@@ -30,13 +30,14 @@ class PollController extends Controller
     }
 
     /**
-     * @Route("/vote", name="vote", methods={"POST","HEAD"})
+     * @Route("/vote", name="vote  master", methods={"POST","HEAD"})
      */
     public function voteAction(Request $request)
     {
         $color = $request->get('color');
+        $callerIp = $request->get('ip');
         $result = $this->_pollService->setVote($color);
-        $this->_publisherService->sendNotification('subscribes',json_encode($result));
+        $this->_publisherService->sendNotification('subscribes',json_encode($result),$callerIp);
 
         return $this->json($result);
     }

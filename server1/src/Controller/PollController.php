@@ -21,7 +21,7 @@ class PollController extends Controller
     }
 
     /**
-     * @Route("/poll", name="poll",methods={"GET","HEAD"})
+     * @Route("/poll", name="poll server",methods={"GET","HEAD"})
      */
     public function getPollAction()
     {
@@ -31,23 +31,24 @@ class PollController extends Controller
     }
 
     /**
-     * @Route("/vote", name="vote selection", methods={"POST","HEAD"})
+     * @Route("/vote", name="vote selection server", methods={"POST","HEAD"})
      */
     public function voteAction(Request $request)
     {
         $vote = $request->get('color');
-        $this->_pollService->setVote($vote);
-        return $this->json(true);
+        $result = $this->_pollService->setVote($vote);
+        $this->_pollService->setVoteCache($result);
+        return $this->json((array)json_decode($result));
     }
 
 
     /**
-     * @Route("/vote-notification", name="vote notification",methods={"POST","HEAD"})
+     * @Route("/vote-notification", name="vote notification server",methods={"POST","HEAD"})
      */
     public function notificationPollVoteAction(Request $request)
     {
         $poll = $request->get('data');
-        $this->_pollService->voteNotification($poll);
+        $this->_pollService->setVoteCache($poll);
         return $this->json(true);
     }
 

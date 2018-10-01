@@ -16,9 +16,10 @@ class PollService extends Curl
 
     public function vote($color)
     {
-        $this->curlPost($this->_proxyUrl,[
+        $result = $this->curlPost($this->_proxyUrl,[
         'color' => $color,
         'route'=>'vote'
         ]);
+        return json_decode($result, true);
     }
 }

@@ -12,14 +12,16 @@ class PublisherService extends Curl
         $this->_subscribeService = $subscribeService;
     }
 
-    public function sendNotification($variableKey,$data)
+    public function sendNotification($variableKey,$data,$callerIp)
     {
         $subscribes = $this->_subscribeService->getSubscribes($variableKey);
 
-        foreach ($subscribes as $subscribe){
-            $this->curlPost($subscribe,['data'=>$data]);
-        }
 
+        foreach ($subscribes as $subscribe) {
+            if(strpos($subscribe, $callerIp) === false){
+                $this->curlPost($subscribe, ['data' => $data]);
+            }
+        }
         return true;
     }
 
