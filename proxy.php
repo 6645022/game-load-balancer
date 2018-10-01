@@ -1,11 +1,11 @@
 <?php
 //
-//$ips = array("127.0.0.1:8002","127.0.0.1:8003","127.0.0.1:8004");
-$ips = array("127.0.0.1:8002");
+$ips = array("127.0.0.1:8002","127.0.0.1:8003","127.0.0.1:8004");
+//$ips = array("127.0.0.1:8002");
 
-
+//health-check
 function healthCheck( $url ) {
-    $timeout = 3;
+    $timeout = 4;
     $ch = curl_init();
     curl_setopt ( $ch, CURLOPT_URL, $url );
     curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
@@ -56,10 +56,7 @@ function curlPost($url, array $params)
 
 }
 
-function run($ips){
-
-    $key = array_rand($ips);
-    $server  = $ips[$key];
+function run($server){
 
     if (isset($_GET) && count($_GET) ) {
         echo curlGet($server.'/'.$_GET['route']);
@@ -67,21 +64,21 @@ function run($ips){
         echo curlPost($server.'/'.$_POST['route'],$_POST);
     }
 }
-
-//function _contracture($ips){
-//    $key = array_rand($ips);
-//    $server  = $ips[$key];
-//    if( !healthCheck( $server ) ) {
-//        unset($ips[$key]);
-//        _contracture($ips);
-//    }
-//    else {
-//        run($server);
-//    }
-//}
+//
+function _contracture($ips){
+    $key = array_rand($ips);
+    $server  = $ips[$key];
+    if( !healthCheck( $server.'/ping') ) {
+        unset($ips[$key]);
+        _contracture($ips);
+    }
+    else {
+        run($server);
+    }
+}
 
 if(isset($_GET)|| isset($_POST)){
-    run($ips);
+    _contracture($ips);
 }
 
 

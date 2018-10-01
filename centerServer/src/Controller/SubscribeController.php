@@ -54,7 +54,7 @@ class SubscribeController extends Controller
     public function clearSubscribe()
     {
 
-        $this->_subscribeService->clearCache($this->_variableKey);
+        $this->_subscribeService->clearCache();
 
         return $this->json(true);
     }

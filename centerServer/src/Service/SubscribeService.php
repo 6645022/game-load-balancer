@@ -1,21 +1,22 @@
 <?php
 namespace App\Service;
 
+use APP\Service\CacheService;
+
 use Symfony\Component\Cache\Simple\FilesystemCache;
 
 class SubscribeService
 {
     public $_subscribes = [];
-    private $_cache;
+    private $_cacheService;
 
-    public function __construct()
+    public function __construct(CacheService $cacheService)
     {
-        $this->_cache = new FilesystemCache();
-
+        $this->_cacheService = $cacheService;
     }
     public function getSubscribes($variableKey)
     {
-        $_subscribes = $this->_cache->get($variableKey);
+        $_subscribes = $this->_cacheService->get($variableKey);
         if(count($_subscribes) > 0){
             $this->_subscribes = $_subscribes;
         }else{
@@ -26,33 +27,39 @@ class SubscribeService
 
     public function setSubscribes($ip,$variableKey)
     {
-        if (!$this->_cache->has($variableKey)) {
+        if (!$this->_cacheService->has($variableKey)) {
             $_subscribes = array();
         }else{
-            $_subscribes = $this->_cache->get($variableKey);
+            $_subscribes = $this->_cacheService->get($variableKey);
         }
         if(!in_array($ip,$_subscribes)){
             array_push($_subscribes,$ip);
             // save a new item in the cache
-            $this->_cache->set($variableKey, $_subscribes);
+            $this->_cacheService->set($variableKey, $_subscribes);
 
         }
         $this->_subscribes = $_subscribes;
         return $this->_subscribes;
 
     }
-    // remove the cache key
-    public function deleteSubscribe($ip,$variableKey)
+    // remove server subscribe from list
+    public function deleteSubscribe($subscribe,$variableKey)
     {
-        $this->_cache->delete($variableKey,$ip);
+        $_subscribes = $this->_cacheService->get($variableKey);
+
+        if(!in_array($subscribe,$_subscribes)){
+            $key = array_search ($subscribe, $_subscribes);
+            unset($_subscribes[$key]);
+
+            $this->_cacheService->set($variableKey, $_subscribes);
+        }
         return;
     }
 
-
     // CLEAR the cache
-    public function clearCache($variableKey)
+    public function clearCache()
     {
-        $this->_cache->clear($variableKey);
+        $this->_cacheService->clear();
         return;
     }
 }

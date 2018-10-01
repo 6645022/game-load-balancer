@@ -3,25 +3,27 @@
 namespace App\Service;
 
 use App\Curl;
-use Symfony\Component\Cache\Simple\FilesystemCache;
+use APP\Service\CacheService;
 
 
 class PollService extends Curl
 {
     private $_centerServer = "http://127.0.0.1:8008";
     private $_cacheColor = "color";
-    private $_cache;
+    private $_cacheService;
 
-    public function __construct()
+
+    public function __construct(CacheService $cacheService)
     {
-        $this->_cache = new FilesystemCache();
-
+        $this->_cacheService = $cacheService;
     }
+
     public function getPoll()
     {
-        $result = $this->_cache->get($this->_cacheColor);
-        if($result == null) {
-            $this->_cache->delete($this->_cacheColor);
+        $result = $this->_cacheService->get($this->_cacheColor);
+
+        if(!$result || $result == null) {
+            $this->_cacheService->delete($this->_cacheColor);
 
             $result = $this->curlGet($this->_centerServer . '/poll');
             if ($result != null) {
@@ -34,7 +36,7 @@ class PollService extends Curl
 
     public function setVoteCache($data){
         if($data != null) {
-            $this->_cache->set($this->_cacheColor, $data,3600);
+            $this->_cacheService->set($this->_cacheColor, $data,3600);
         }
         return;
     }

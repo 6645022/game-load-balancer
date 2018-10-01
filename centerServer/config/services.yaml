@@ -39,3 +39,6 @@ services:
     poll_service:
         class: App\Service\PollService
         public: true
+    cache_service:
+        class: App\Service\CacheService
+        public: true

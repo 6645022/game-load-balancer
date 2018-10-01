@@ -35,3 +35,7 @@ services:
     subscribe_service:
         class: App\Service\SubscribeService
         public: true
+
+    cache_service:
+        class: App\Service\CacheService
+        public: true
