@@ -19,11 +19,13 @@ class PublisherService extends Curl
 
         foreach ($subscribes as $subscribe) {
             if(strpos($subscribe, $callerIp) === false){
-                if($this->healthCheck($callerIp)){
-                    $this->curlPost($subscribe, ['data' => $data]);
-                }else{
-                    $this->_subscribeService->deleteSubscribe($subscribe,$variableKey);
-                }
+//                if($this->healthCheck($callerIp)){ TODO synchronized block healthCheck ping
+                    $this->curlPost($subscribe, [
+                        'data' => $data
+                    ]);
+//                }else{
+//                    $this->_subscribeService->deleteSubscribe($subscribe,$variableKey);
+//                }
             }
         }
         return true;

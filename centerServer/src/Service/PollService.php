@@ -26,14 +26,9 @@ class PollService
         return json_decode($contents, true);
     }
 
-    public function setVote($color)
+    public function setVote($votes)
     {
-        $votes = $this->getPoll();
-
-        $votes[$color]++;
-        $this->_fileSystem->dumpFile($this->_dbFolder.'/'.$this->_dbFile, json_encode($votes));
-
-        return $votes;
-
+        $this->_fileSystem->dumpFile($this->_dbFolder.'/'.$this->_dbFile,$votes);
+        return;
     }
 }

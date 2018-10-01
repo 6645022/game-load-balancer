@@ -35,10 +35,15 @@ class PollController extends Controller
      */
     public function voteAction(Request $request)
     {
-        $vote = $request->get('color');
-        $result = $this->_pollService->setVote($vote);
-        $this->_pollService->setVoteCache($result);
-        return $this->json((array)json_decode($result));
+        $color = $request->get('color');
+
+        $poll = $this->_pollService->getPoll();
+        $poll[$color]++;
+
+        $this->_pollService->setVoteCache($poll);
+        $this->_pollService->setVote($poll);
+
+        return $this->json($poll);
     }
 
 
@@ -48,7 +53,8 @@ class PollController extends Controller
     public function notificationPollVoteAction(Request $request)
     {
         $poll = $request->get('data');
-        $this->_pollService->setVoteCache($poll);
+
+        $this->_pollService->setVoteCache(json_decode($poll),1);
         return $this->json(true);
     }
 

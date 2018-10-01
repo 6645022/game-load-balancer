@@ -27,7 +27,7 @@ class PollService extends Curl
 
             $result = $this->curlGet($this->_centerServer . '/poll');
             if ($result != null) {
-                $this->setVoteCache($result);
+                $this->setVoteCache(json_decode($result, true));
             }
         }
 
@@ -36,15 +36,15 @@ class PollService extends Curl
 
     public function setVoteCache($data){
         if($data != null) {
-            $this->_cacheService->set($this->_cacheColor, $data,3600);
+            $this->_cacheService->set($this->_cacheColor,json_encode($data),3600);
         }
         return;
     }
 
-    public function setVote($color)
+    public function setVote($votes)
     {
        $result =  $this->curlPost($this->_centerServer.'/vote',[
-            'color' => $color,
+            'votes' => json_encode($votes),
             'ip' => $_SERVER['HTTP_HOST']
         ]);
         return $result;

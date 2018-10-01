@@ -34,12 +34,13 @@ class PollController extends Controller
      */
     public function voteAction(Request $request)
     {
-        $color = $request->get('color');
+        $votes = $request->get('votes');
         $callerIp = $request->get('ip');
-        $result = $this->_pollService->setVote($color);
-        $this->_publisherService->sendNotification('subscribes',json_encode($result),$callerIp);
+        $this->_pollService->setVote($votes);
 
-        return $this->json($result);
+        $this->_publisherService->sendNotification('subscribes',json_encode(json_decode($votes),true),$callerIp);
+
+        return $this->json($votes);
     }
 
 }

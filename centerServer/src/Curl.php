@@ -16,13 +16,13 @@ class Curl
         $http_respond = curl_exec($ch);
         $http_respond = trim( strip_tags( $http_respond ) );
         $http_code = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
+        curl_close( $ch );
         if ( ( $http_code == "200" ) || ( $http_code == "302" ) ) {
             return true;
         } else {
             // return $http_code;, possible too
             return false;
         }
-        curl_close( $ch );
     }
     protected function curlGet($url){
         $ch = curl_init();
