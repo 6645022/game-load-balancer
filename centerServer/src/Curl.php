@@ -8,7 +8,7 @@ class Curl
 
 
     protected function healthCheck( $url ) {
-        $timeout = 4;
+        $timeout = 10;
         $ch = curl_init();
         curl_setopt ( $ch, CURLOPT_URL, $url );
         curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );

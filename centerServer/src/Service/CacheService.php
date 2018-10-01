@@ -26,7 +26,7 @@ class CacheService
 
     }
     public function has($variableKey){
-        $this->_cache->has($variableKey);
+       return $this->_cache->has($variableKey);
 
     }
     public function delete($variableKey){
