@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ title }}{% endblock %}
+{% block body %}
+<div class="comd-6 offset-3">
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+            <h4>{{ title }}</h4><br />
+            <form method="post" action="/poll" id="poll_form">
+                {% for color in colors %}
+                    <div class="card" style="width: 18rem;background-color:{{ color }}">
+                        <div class="card-img-top"></div>
+                        <div class="card-body">
+                            <label><h4><input type="radio" name="poll_option"  value="{{ color }}"/>{{ color|upper }}</h4></label>
+                        </div>
+                    </div>
+                {% endfor %}
+                <br />
+                <input type="submit" name="poll_button" id="poll_button" class="btn btn-primary btn-lg" />
+            </form>
+            <br />
+        </div>
+        <div class="col-md-4">
+            <h4>Live Poll Result</h4><br />
+            <ul class="list-group">
+                {% for key,value in result %}
+                <li class="list-group-item" >
+                    <b>{{ loop.index }}.</b> {{ key|upper }}
+                    <span class="badge"> {{ value }}%</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
