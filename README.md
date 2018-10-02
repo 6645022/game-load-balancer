@@ -1,7 +1,12 @@
 # GAME load-balancer
 
+# Routes
 
-#Installation
+ Client - `127.0.0.1:8000`
+ 
+ Clear cache `127.0.0.1:8002/clear`
+
+# Installation
 
 _Windows environment_ 
 
